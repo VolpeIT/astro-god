@@ -1,0 +1,31 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro"
+import NavStatic from "@/components/NavStatic.astro"
+
+export const getStaticPaths = (async() => {
+  const pages = await getCollection("blog")
+  const blog = await getCollection("blog")
+  // const globals = await getCollection("globals")
+  return pages.map((page) => {
+    const [lang, ...rest] = page.slug.split("/")
+    return { params: { slug: lang, id: page.data.path || undefined }, props: {...page, blog: blog.filter(post => post.slug.includes(lang))} }
+    // return { params: { slug: lang, id: rest.join("/") || undefined }, props: page }
+  })
+}) satisfies GetStaticPaths;
+
+const {slug} = Astro.params
+const {body, data: t,blog} = Astro.props
+
+const { Content } = await Astro.props.render()
+
+---
+
+<Layout seoTitle={t["h1"]} blog={blog}>
+  <!-- {slug} -->
+  <h1>{t["h1"]}</h1>
+  <h2>{t["h2"]}</h2>
+  <!-- <span class={`fi fi-${flag}`}></span> -->
+  <Content/>
+</Layout>

@@ -1,0 +1,33 @@
+
+<nav class="fixed bottom-0 lg:h-screen bg-red-500 drop-shadow-[0_0px_10px_rgba(0,0,0,.5)] flex lg:flex-col justify-center items-center w-full lg:w-auto mt-0">
+  <label class="z-10 mb-0" style="margin-bottom:0; width: 100%;">
+    <Book classes="p-2.5 bg-black lg:w-full"/>
+    <input type="checkbox" class="hidden sel"/>
+    <div class="flex absolute right-0 lg:top-0 transition-transform -z-10 bg-yellow-50 w-[300px] h-screen">
+      hola
+    </div>
+  </label>
+  <label class="relative z-10 mt-auto" style="display: flex; margin-bottom: 0; margin-top: 0;">
+    <div class="flex p-4 bg-black justify-center items-center mt-0">
+      <span class={`fi fi-${flags[currentLang]} rounded-sm`}/>
+    </div>
+    <input type="checkbox" class="hidden sel"/>
+    <div class="flex absolute right-0 top-0 transition-transform -z-10">
+      {langs.map(lang => {
+        if (lang in translatedSlugs) {}
+        else {
+          console.error(`Falta traduccion de *${lang}* en ${thisPostSlug}`)
+          return 
+        }
+        if (lang == currentLang) return
+        return (
+          <a 
+            class="flex p-4"
+            href={`/${lang}/${withBlog}${isBlog ? translatedSlugs[lang] : slug.join("/")}`}>
+            <span class={`fi fi-${flags[lang]} rounded-sm`}/>
+          </a>
+        )
+      })}
+    </div>
+  </label>
+</nav>

@@ -1,14 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { ClientRouter } from 'astro:transitions'
+import "../styles/global.css";
+import NavStatic from '@/components/NavStatic.astro';
+
+interface Props {
+  seoTitle: string
+  blog: CollectionEntry<"blog">[]
+}
+
+const { seoTitle, blog } = Astro.props
+const [_, lang] = Astro.url.pathname.split("/")
+---
+
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>Fedev | {seoTitle}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"
+    />
+    <!-- <link -->
+    <!--   rel="stylesheet" -->
+    <!--   href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" -->
+    <!-- /> -->
+    <script is:inline src="https://kit.fontawesome.com/ada24765e5.js" crossorigin="anonymous"></script>
+    <ClientRouter/>
 	</head>
-	<body>
-		<slot />
+	<body class="relative bg-[#43434e] text-white">
+    <NavStatic blog={blog}/>
+    <div class="lg:ml-20 p-4 bg-whit">
+      <slot />
+    </div>
 	</body>
 </html>
 

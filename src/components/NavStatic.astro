@@ -1,0 +1,173 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import Book from "@/components/Book.astro";
+import Home from "@/components/Home.astro"
+import Chart from "@/components/Chart.astro"
+
+interface Props {
+  blog: CollectionEntry<"blog">[]
+}
+
+const pages = await getCollection("pages");
+const posts = await getCollection("blog");
+
+const langs = [...new Set(pages.map(({ slug }) => slug.split("/")[0]))];
+
+const [, currentLang, ...slug] = Astro.url.pathname.split("/");
+
+function getLanguageFlags(collection: CollectionEntry<"pages">[]) {
+  return collection.reduce<Record<string, string>>((flags, { slug, data }) => {
+    flags[slug] = data["global.flag"];
+    return flags;
+  }, {});
+}
+
+let thisPostSlug: string
+const flags = getLanguageFlags(pages);
+
+function getTranslatedSlugs(posts: CollectionEntry<"blog">[]) {
+  const postType = posts.find(post => {
+    const thisPath = Astro.url.pathname.split("/").filter(e=>e).at(-1)
+    return post.data.path == thisPath
+  })
+
+  const postId = postType?.id.split("/").at(-1) || ""
+  thisPostSlug = postId
+
+  return posts.reduce<Record<string, string>>((links, post, i) => {
+    if (!post.id.includes(postId)) {
+      return links
+    }
+
+    const [lang] = post.slug.split("/");
+    links[lang] = post.data.path;
+    return links;
+  }, {});
+}
+
+const translatedSlugs = getTranslatedSlugs(posts);
+const isBlog = slug.includes("blog");
+const withBlog = isBlog ? "blog/" : ""
+
+const {blog} = Astro.props
+
+function addBlogToSlug(post: CollectionEntry<"blog">): string {
+  const [lang] = post.slug.split("/")
+  return [lang, "blog", post.data.path].join("/")
+}
+// console.log(blog)
+---
+
+<nav class="fixed flex bottom-0 w-full border-t lg:left-0 lg:flex-col lg:h-screen lg:w-auto lg:border-r lg:border-t-transparent border-white/50">
+
+  <label class="lg:relative cursor-pointer" style="margin-bottom: 0;">
+    <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30" title="blog">
+      <Book/>
+    </div>
+    <input type="checkbox" class="sel hidden"/>
+    <div class="absolute top-0 flex -z-10 transition-transform bg-[#141418] lg:right-0 p-4 lg:h-screen flex-col whitespace-nowrap">
+      {blog.map(post => {
+        return <a href={`/${addBlogToSlug(post)}`} class="text-white">{post.data.h1}</a>
+      })}
+    </div>
+  </label>
+
+  <label class=" cursor-pointer" style="margin-bottom: 0;">
+    <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30" title="components">
+      <Chart/>
+    </div>
+    <input type="checkbox" class="sel hidden"/>
+    <div class="absolute top-0 flex -z-10 transition-transform bg-[#141418] lg:right-0 p-4 lg:h-screen flex-col whitespace-nowrap">
+      {blog.map(post => {
+        return <a href={`/${addBlogToSlug(post)}`} class="text-white">{post.data.h1}</a>
+      })}
+    </div>
+  </label>
+
+  <a href={`/${currentLang}/`} title="home" class="hover:bg-white/30">
+    <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto">
+      <Home/>
+    </div>
+  </a>
+
+  <div class="w-full bg-[#141418] h-auto h-full absolute -z-[1]"></div>
+
+
+  <label class="ml-auto lg:mt-auto lg:relative lg:w-full cursor-pointer" style="margin-bottom: 0;">
+    <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30">
+      <span class={`fi fi-${flags[currentLang]} rounded-sm`} style="aspect-ratio: 4/3; width: 2rem;"/>
+    </div>
+    <input type="checkbox" class="sel hidden"/>
+    <div class="absolute top-0 flex right-0 -z-10 transition-transform">
+      {langs.map(lang => {
+        if (lang in translatedSlugs) {}
+        else {
+          console.error(`Falta traduccion de *${lang}* en ${thisPostSlug}`)
+          return 
+        }
+        if (lang == currentLang) return
+        return (
+          <a 
+            class="flex p-4"
+            href={`/${lang}/${withBlog}${isBlog ? translatedSlugs[lang] : slug.join("/")}`}>
+            <span class={`fi fi-${flags[lang]} rounded-sm`} style="aspect-ratio: 4/3; width: 2rem;"/>
+          </a>
+        )
+      })}
+    </div>
+  </label>
+</nav>
+
+<style>
+  .fi:before {
+    visibility: hidden;
+  }
+
+  @media (width < 1024px) {
+    .sel + div {
+      pointer-events: none;
+      transform: translateY(150%);
+    }
+
+    .sel:checked ~ div {
+      pointer-events: inherit;
+      transform: translateY(-100%);
+
+    }
+  }
+
+  @media (width > 1024px) {
+    .sel + div {
+      pointer-events: none;
+      transform: translateX(-100%);
+    }
+
+    .sel:checked + div {
+      pointer-events: inherit;
+      transform: translateX(100%);
+    }
+  }
+
+
+.sel:checked + div a:hover {
+
+  filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
+          drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
+}
+
+
+  .country-selector:hover ~div{
+    transform: translateX(100%);
+  }
+
+  .country-selector ~div:hover{
+    transform: translateX(100%);
+  }
+
+  .country-selector ~div a:hover{
+  filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
+          drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
+  }
+
+</style>
