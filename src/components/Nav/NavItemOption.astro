@@ -1,0 +1,19 @@
+---
+interface Props {
+  href: string;
+  text: string;
+}
+
+const { href, text } = Astro.props
+---
+
+<a href={href} class="tal text-white/80 px-4 py-2 hover:bg-white/15 cursor-pointer">{text}</a>
+
+<style>
+  .tal {
+    text-overflow: ellipsis;
+    /* Needed to make it work */
+    overflow: hidden;
+    white-space: nowrap;
+  }
+</style>

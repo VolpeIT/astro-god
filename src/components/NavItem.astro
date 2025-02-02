@@ -1,25 +1,31 @@
 ---
 import type { AstroComponentInstance } from 'astro/runtime/server/index.js'
+import type { Component } from 'react';
 
 interface Props {
-  iconElement: AstroComponentInstance;
-  relative: boolean;
-  fit: boolean;
-  row: boolean;
-  right: boolean;
+  relative?: boolean | 1 | 0;
+  fit?: boolean | 1 | 0;
+  row?: boolean | 1 | 0;
+  right?: boolean | 1 | 0;
+  color?: boolean | 1 | 0;
+  py?: number;
+  title: string;
 }
 
-const {iconElement: Icon, relative, fit, row, right} = Astro.props
+const { relative, fit, row, right, color, py, title } = Astro.props
 ---
 
-<label class={`cursor-pointer ${relative ? "relative" : ""}`} style="margin-bottom: 0;">
-  <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30 grayscale hover:grayscale-0 transition-all" title="blog">
-    <Icon/>
+<label class={`${relative ? "relative" : ""}`} style="margin-bottom: 0;">
+  <div class={`icon cursor-pointer flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30 hover:grayscale-0 transition-all`} title="blog" style={`filter: grayscale(${color ? 0 : 1});`}>
+    <slot name="icon"/>
   </div>
-  <input type="checkbox" class="sel hidden"/>
-  <div class={`absolute top-0 flex -z-10 transition-transform bg-[#141418] lg:right-0 ${right && "right-0"} ${fit ? "" : "lg:h-screen"} flex-${row ? "row" : "col"} whitespace-nowrap`}>
+  <input type="radio" name="nav-item" class="sel hidden"/>
+  <div class={`absolute top-0 flex max-w-80 -z-10 transition-transform bg-[#141418] lg:right-0 ${right && "right-0"} ${fit ? "" : "lg:h-screen"} whitespace-nowrap`} style={`flex-direction: ${row ? "row" : "column"};`}>
+
+    <slot name="title"/>
     <slot/>
   </div>
+  <div class="fixed top-0 left-0 w-screen h-screen -z-20 backdrop-blur-[3px] cursor-default"></div>
 </label>
 
 <style>
@@ -27,9 +33,13 @@ const {iconElement: Icon, relative, fit, row, right} = Astro.props
     visibility: hidden;
   }
 
-  div:has(+ *:checked) {
-    filter: grayscale(0);
+  .icon:has(+ *:checked) {
+    filter: grayscale(0) !important;
   } 
+
+  .icon:hover {
+    filter: grayscale(0) !important;
+  }
 
   @media (width < 1024px) {
     .sel + div {
@@ -37,7 +47,7 @@ const {iconElement: Icon, relative, fit, row, right} = Astro.props
       transform: translateY(150%);
     }
 
-    .sel:checked ~ div {
+    .sel:checked + div {
       pointer-events: inherit;
       transform: translateY(-100%);
 
@@ -56,12 +66,23 @@ const {iconElement: Icon, relative, fit, row, right} = Astro.props
     }
   }
 
+  .sel + div + div {
+    opacity: 0;
+    transition: .4s all ease;
+    pointer-events: none;
+  }
 
-.sel:checked + div a:hover {
+  .sel:checked + div + div {
+    opacity: 1;
+    pointer-events: all;
+  }
 
-  filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
-          drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
-}
+
+  .sel:checked + div a:hover {
+
+    filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
+            drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
+  }
 
 
   .country-selector:hover ~div{
@@ -73,8 +94,9 @@ const {iconElement: Icon, relative, fit, row, right} = Astro.props
   }
 
   .country-selector ~div a:hover{
-  filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
-          drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
+    filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
+            drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
   }
 
 </style>
+

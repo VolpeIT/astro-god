@@ -5,6 +5,15 @@ import Layout from "@/layouts/Layout.astro"
 import NavStatic from "@/components/NavStatic.astro"
 import type { CollectionEntry } from "astro:content";
 
+const getTal = async () => {
+  const pages = await getCollection("pages")
+  const blog = await getCollection("blog")
+  return pages.map((page) => {
+    const [lang] = page.slug.split("/")
+    return { params: { slug: lang || undefined }, props: {...page, blog: blog.filter(post => post.slug.includes(lang))} }
+  })
+}
+
 export const getStaticPaths = (async() => {
   const pages = await getCollection("pages")
   const blog = await getCollection("blog")
@@ -23,7 +32,7 @@ function addBlogToSlug(post: CollectionEntry<"blog">): string {
 }
 ---
 
-<Layout  seoTitle={t["index.seoTitle"]} blog={blog}>
+<Layout seoTitle={t["index.seoTitle"]}>
   <h1>{t["index.h1"]}</h1>
   <h2>{t["index.h2"]}</h2>
   <p>{t["index.p1"]}</p>

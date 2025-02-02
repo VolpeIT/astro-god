@@ -6,9 +6,11 @@ import Home from "@/components/Home.astro"
 import Chart from "@/components/Chart.astro"
 import NavItem from "@/components/NavItem.astro"
 import NavLangPicker from "@/components/NavLangPicker.astro"
+import NavItemOption from "@/components/Nav/NavItemOption.astro";
+import NavTitle from "./Nav/Title.astro";
+import type { CollectionKey } from "astro:content";
 
 interface Props {
-  blog: CollectionEntry<"blog">[]
 }
 
 const pages = await getCollection("pages");
@@ -52,26 +54,31 @@ const translatedSlugs = getTranslatedSlugs(posts);
 const isBlog = slug.includes("blog");
 const withBlog = isBlog ? "blog/" : ""
 
-const {blog} = Astro.props
+
+const getBlog = async (lang: string) => {
+  const blog = await getCollection("blog")
+  return blog.filter(post => post.slug.includes(lang)).map(post => ({...post, href: addBlogToSlug(post)}))
+}
+
+const blog = await getBlog(currentLang);
 
 function addBlogToSlug(post: CollectionEntry<"blog">): string {
   const [lang] = post.slug.split("/")
-  return [lang, "blog", post.data.path].join("/")
+  return ["", lang, "blog", post.data.path].join("/")
 }
-// console.log(blog)
 ---
 
-<nav class="fixed flex bottom-0 w-full border-t lg:left-0 lg:flex-col lg:h-screen lg:w-auto lg:border-r lg:border-t-transparent border-white/50">
-  <NavItem iconElement={Book}>
-    {blog.map(post => {
-      return <a href={`/${addBlogToSlug(post)}`} class="text-white px-4 py-2">{post.data.h1}</a>
-    })}
+<nav class="fixed flex bottom-0 w-full lg:left-0 lg:flex-col lg:h-screen lg:w-auto lg:border-t-0">
+  <NavItem>
+    <Book slot="icon"/>
+    <NavTitle title="Blog"/>
+    {blog.map(post => <NavItemOption text={post.data.h1} href={post.href}/>)}
   </NavItem>
 
-  <NavItem iconElement={Chart}>
-    {blog.map(post => {
-      return <a href={`/${addBlogToSlug(post)}`} class="text-white">{post.data.h1}</a>
-    })}
+  <NavItem>
+    <Chart slot="icon"/>
+    <NavTitle title="Components"/>
+    {blog.map(post => <NavItemOption text={post.data.h1} href={post.href}/>)}
   </NavItem>
 
   <a href={`/${currentLang}/`} title="home" class="hover:bg-white/30 grayscale hover:grayscale-0 transition-all">
@@ -80,11 +87,13 @@ function addBlogToSlug(post: CollectionEntry<"blog">): string {
     </div>
   </a>
 
-  <div class="w-full bg-[#141418] h-auto h-full absolute -z-[1]"></div>
-  <div class="w-full bg-[#141418] h-auto h-full  -z-[1]"></div>
+  <div class="w-full bg-[#141418] h-auto h-full absolute -z-[1] border-white/40 max-lg:border-t lg:border-r"></div>
+  <div class="w-full bg-[#141418] h-auto h-full  -z-[1] border-white/40 max-lg:border-t lg:border-r"></div>
 
 
-  <NavItem iconElement={NavLangPicker} relative={1} fit={1} row={1} right={1}>
+  <NavItem relative={1} fit={1} row={1} right={1} color={1} py={0}>
+    <NavLangPicker slot="icon"/>
+
     {langs.map(lang => {
       if (lang in translatedSlugs) {}
       else {
@@ -103,59 +112,17 @@ function addBlogToSlug(post: CollectionEntry<"blog">): string {
   </NavItem>
 </nav>
 
-<style>
-  .fi:before {
-    visibility: hidden;
-  }
-
-  div:has(+ *:checked) {
-    filter: grayscale(0);
-  } 
-
-  @media (width < 1024px) {
-    .sel + div {
-      pointer-events: none;
-      transform: translateY(150%);
+<script>
+  document.addEventListener("mouseup", (event) => {
+    const target = event.target as HTMLElement;
+    const t = target.closest("label")?.children[1]
+    if (t) {
+      let radio = t as HTMLInputElement
+      if (radio.checked) setTimeout(() => radio.checked = false, 0)
+    } else {
+      document.querySelectorAll('input[name="nav-item"]').forEach((input) => {
+        (input as HTMLInputElement).checked = false;
+      });
     }
-
-    .sel:checked ~ div {
-      pointer-events: inherit;
-      transform: translateY(-100%);
-
-    }
-  }
-
-  @media (width > 1024px) {
-    .sel + div {
-      pointer-events: none;
-      transform: translateX(-100%);
-    }
-
-    .sel:checked + div {
-      pointer-events: inherit;
-      transform: translateX(100%);
-    }
-  }
-
-
-.sel:checked + div a:hover {
-
-  filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
-          drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
-}
-
-
-  .country-selector:hover ~div{
-    transform: translateX(100%);
-  }
-
-  .country-selector ~div:hover{
-    transform: translateX(100%);
-  }
-
-  .country-selector ~div a:hover{
-  filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
-          drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
-  }
-
-</style>
+  });
+</script>
