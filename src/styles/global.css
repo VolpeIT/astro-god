@@ -17,6 +17,11 @@ pre {
   padding: 1rem;
 }
 
+code:has(> span) {
+  padding: 0 !important;
+  padding-left: 2.5rem !important;
+}
+
 li:not(.task-list-item),
 ol {
   margin-left: 1rem;
@@ -34,4 +39,25 @@ ol {
 
 html {
   /* --pico-primary: red !important; */
+}
+
+p a {
+  display: inline-block;
+}
+
+code {
+  counter-set: code;
+  position: relative;
+}
+
+code>span {}
+
+code>span::before {
+  counter-increment: code;
+  content: counter(code) " ";
+  color: rgba(255, 255, 255, 0.3);
+  text-align: right;
+  position: absolute;
+  display: flex;
+  right: 96%;
 }

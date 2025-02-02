@@ -8,6 +8,10 @@ h2: "Una Guía para Alcanzar tus Sueños"
 
 ## Una Guía para Alcanzar tus Sueños
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
 **Texto en negrita**  
 _Texto en cursiva_  
 ~~Texto tachado~~
@@ -72,4 +76,10 @@ int main() {
 
 [Ejemplo de enlace](https://example.com)
 
+<a href="https://example.com" target="_blank">Target blank!</a>
+
 ![Ejemplo de imagen](https://imgs.search.brave.com/A1g3HIVyF53pk_YrZz0qOisvTPAwV07XS1GJtghqV5c/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3ZpdGUvYXNz/ZXRzL3Bob3RvLUM4/cTBLUUhHLndlYnA)
+
+[<img src="http://www.google.com.au/images/nav_logo7.png"/>](http://google.com.au/)
+
+<a href="https://example.com" target="_blank"><img src="http://www.google.com.au/images/nav_logo7.png"/></a>

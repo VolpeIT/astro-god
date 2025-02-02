@@ -45,22 +45,26 @@ const headerHrefs = extractHeaders(body ?? "")
 const headersNice = extractRawHeaders(body ?? "")
 ---
 
-<Layout seoTitle={t["h1"]} blog={blog}>
+<Layout seoTitle={t["h1"]} >
   <section class="flex gap-10">
-    <aside class="h-full sticky top-10 min-w-30 max-w-60">
+    <aside class="h-full sticky top-14 w-50 max-lg:hidden pico">
       <ul>
         {headerHrefs.map((header, i) => {
           return <li><a href={`#${header}`} class="-z-10 tal block text-sm text-white/70 hover:text-white">{headersNice[i]}</a></li>
         })}
       </ul>
     </aside>
-    <div class="pico">
+    <div class="max-w-full box-border pico">
       <Content/>
     </div>
   </section>
 </Layout>
 
 <style>
+  section {
+    /* box-sizing: border-box !important; */
+    /* padding: .5rem; */
+  }
   .tal {
     text-overflow: ellipsis;
     /* Needed to make it work */
@@ -69,5 +73,9 @@ const headersNice = extractRawHeaders(body ?? "")
   }
   li {
     margin-left: 0;
+    list-style: none !important;
+  }
+  a { 
+    text-decoration: none !important;
   }
 </style>
