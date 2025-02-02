@@ -118,7 +118,7 @@ const availableFlags = langs.filter(lang => {
   <div class="w-full bg-[#141418] h-full  -z-[1] border-white/40 max-lg:border-t lg:border-r"></div>
 
 
-  <NavItem relative fit row right color py={0} title="paises" enabled={availableFlags.length}>
+  <NavItem relative fit row right color title={t["nav.changeLanguage"]} enabled={availableFlags.length}>
     <NavLangPicker slot="icon"/>
     {availableFlags.map((lang) => {
       return (

@@ -1,6 +1,7 @@
 ---
 global.flag: "ar"
 ################################################################################
+nav.changeLanguage: "Cambiar idioma"
 nav.available: "Única traducción disponible"
 nav.components: "Componentes"
 ################################################################################

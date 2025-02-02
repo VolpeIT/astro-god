@@ -1,6 +1,7 @@
 ---
 global.flag: "gb"
 ################################################################################
+nav.changeLanguage: "Change language"
 nav.available: "Only available translation"
 nav.components: "Components"
 ################################################################################

@@ -1,4 +1,5 @@
 ---
+import getTranslations from '@/utils/getTranslations';
 import type { AstroComponentInstance } from 'astro/runtime/server/index.js'
 import type { Component } from 'react';
 
@@ -14,13 +15,14 @@ interface Props {
 
 const { relative, fit, row, right, color, title, enabled = true } = Astro.props
 const pointerEvents = `pointer-events: ${enabled ? "all" : "none"}`
+const t = await getTranslations(Astro)
 ---
 
-<label class={`${relative ? "relative" : ""}`} title={enabled ? title : "no disponible"} style={`margin-bottom: 0;;`}>
+<label class={`${relative ? "relative" : ""}`} title={enabled ? title : t["nav.available"]} style={`margin-bottom: 0;;`}>
   <div class={`icon cursor-pointer flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30 hover:grayscale-0 transition-all`} style={`filter: grayscale(${color ? 0 : 1}); ${pointerEvents}`}>
     <slot name="icon"/>
   </div>
-  <input type="radio" name="nav-item" class="sel hidden"/>
+  <input type="radio" name="nav-item" class="sel hidden" disabled={!enabled}/>
   <div class={`absolute left-0 top-0 flex max-w-screen lg:max-w-80 -z-10 transition-transform bg-[#141418] lg:left-auto lg:right-0 ${right && "right-0 left-auto"} ${fit ? "" : "lg:h-screen"} whitespace-nowrap`} style={`flex-direction: ${row ? "row" : "column"};`}>
 
     <slot name="title"/>

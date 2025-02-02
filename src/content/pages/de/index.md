@@ -1,6 +1,7 @@
 ---
 global.flag: "de"
 ################################################################################
+nav.changeLanguage: "Sprache ändern"
 nav.available: "Einzige verfügbare Übersetzung"
 nav.components: "Komponenten"
 ################################################################################
