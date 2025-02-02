@@ -20,12 +20,54 @@ const {body, data: t,blog} = Astro.props
 
 const { Content } = await Astro.props.render()
 
+function extractHeaders(markdown: string): string[] {
+  return markdown
+    .split("\n")
+    .filter((line: string) => /^#{1,6} /.test(line)) // Filtra solo los encabezados
+    .map((line: string) =>
+      line
+        .replace(/^#+ /, "") // Elimina los `#` y el espacio
+        .trim()
+        .toLowerCase()
+        .replace(/[^\p{L}0-9\s-]/gu, "") // Conserva letras Unicode (incluyendo acentos), números, espacios y guiones
+        .replace(/\s+/g, "-") // Reemplaza espacios con guiones
+    );
+}
+
+function extractRawHeaders(markdown: string): string[] {
+  return markdown
+    .split("\n")
+    .filter((line: string) => /^#{1,6} /.test(line)) // Filtra solo los encabezados
+    .map((line: string) => line.replace(/^#+ /, "").trim()); // Elimina los `#` iniciales y espacios extra
+}
+
+const headerHrefs = extractHeaders(body ?? "")
+const headersNice = extractRawHeaders(body ?? "")
 ---
 
 <Layout seoTitle={t["h1"]} blog={blog}>
-  <!-- {slug} -->
-  <h1>{t["h1"]}</h1>
-  <h2>{t["h2"]}</h2>
-  <!-- <span class={`fi fi-${flag}`}></span> -->
-  <Content/>
+  <section class="flex gap-10">
+    <aside class="h-full sticky top-10 min-w-30 max-w-60">
+      <ul>
+        {headerHrefs.map((header, i) => {
+          return <li><a href={`#${header}`} class="-z-10 tal block text-sm text-white/70 hover:text-white">{headersNice[i]}</a></li>
+        })}
+      </ul>
+    </aside>
+    <div class="pico">
+      <Content/>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .tal {
+    text-overflow: ellipsis;
+    /* Needed to make it work */
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  li {
+    margin-left: 0;
+  }
+</style>

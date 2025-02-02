@@ -22,12 +22,29 @@ _Texto en cursiva_
 - Elemento no ordenado 2
 - Elemento no ordenado 3
 
+<abbr title="Abbreviation">Abbr.</abbr>
+<strong>Negrita (strong)</strong> <b>Negrita (b)</b>
+<i>Cursiva (i)</i> <em>Cursiva enfatizada (em)</em> <cite>Cita (cite)</cite>
+<del>Eliminado (del)</del>
+<ins>Insertado (ins)</ins>
+<kbd>Ctrl + S</kbd>
+<mark>Resaltado (mark)</mark>
+<s>Tachado (s)</s>
+<small>Pequeño (small)</small>
+H<sub>2</sub>O
+x<sup>2</sup>
+<u>Subrayado (u)</u>
+
+- [ ] tal
+- [x] tal
+
 `Ejemplo de código en línea`
 
 ```c
 #include <stdlib.h>
 #include <raylib.h>
 #include <flecs.h>
+
 
 typedef struct {
     int x,y;

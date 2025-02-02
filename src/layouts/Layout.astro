@@ -29,12 +29,20 @@ const [_, lang] = Astro.url.pathname.split("/")
     <!--   rel="stylesheet" -->
     <!--   href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" -->
     <!-- /> -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.min.css">
+
+    <!-- <link -->
+    <!--   rel="stylesheet" -->
+    <!--   href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.red.min.css" -->
+    <!-- > -->
     <script is:inline src="https://kit.fontawesome.com/ada24765e5.js" crossorigin="anonymous"></script>
     <ClientRouter/>
 	</head>
-	<body class="relative bg-[#43434e] text-white">
+	<body class="relativ text-white pt-10">
     <NavStatic/>
-    <div class="lg:ml-20 p-4 bg-whit">
+    <div class="lg:ml-20 bg-whit">
       <slot />
     </div>
 	</body>
@@ -45,6 +53,6 @@ const [_, lang] = Astro.url.pathname.split("/")
 	body {
 		margin: 0;
 		width: 100%;
-		height: 100%;
+		/* height: 100%; */
 	}
 </style>

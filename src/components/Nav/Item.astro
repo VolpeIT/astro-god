@@ -18,7 +18,7 @@ const pointerEvents = `pointer-events: ${enabled ? "all" : "none"}`
 const t = await getTranslations(Astro)
 ---
 
-<label class={`${relative ? "relative" : ""}`} title={enabled ? title : t["nav.available"]} style={`margin-bottom: 0;;`}>
+<label class={`${relative ? "relative" : ""}`} title={enabled ? title : t["nav.available"]} style={`margin-bottom: 0;`}>
   <div class={`icon cursor-pointer flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30 hover:grayscale-0 transition-all`} style={`filter: grayscale(${color ? 0 : 1}); ${pointerEvents}`}>
     <slot name="icon"/>
   </div>
@@ -28,7 +28,7 @@ const t = await getTranslations(Astro)
     <slot name="title"/>
     <slot/>
   </div>
-  <div class="fixed top-0 left-0 w-screen h-screen -z-20 backdrop-blur-[3px] cursor-default"></div>
+  <div class="fixed top-0 left-0 w-screen h-screen -z-30 backdrop-blur-[3px] cursor-default"></div>
 </label>
 
 <style>

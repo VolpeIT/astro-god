@@ -5,7 +5,7 @@ import Book from "@/components/Book.astro";
 import Home from "@/components/Home.astro"
 import Chart from "@/components/Chart.astro"
 import NavItem from "@/components/Nav/Item.astro"
-import NavLangPicker from "@/components/NavLangPicker.astro"
+import NavLangPicker from "@/components/Nav/LangPicker.astro"
 import NavLink from "@/components/Nav/Link.astro";
 import NavTitle from "./Nav/Title.astro";
 import type { CollectionKey } from "astro:content";
@@ -95,7 +95,7 @@ const availableFlags = langs.filter(lang => {
     })
 ---
 
-<nav class="fixed flex bottom-0 w-full lg:left-0 lg:flex-col lg:h-screen lg:w-auto lg:border-t-0">
+<nav class="fixed flex bottom-0 w-full lg:left-0 lg:flex-col lg:h-screen lg:w-auto lg:border-t-0 z-50">
   <NavItem title="Blog">
     <Book slot="icon"/>
     <NavTitle title={"Blog"}/>

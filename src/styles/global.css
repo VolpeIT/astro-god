@@ -16,3 +16,22 @@ pre {
   border-radius: 10px;
   padding: 1rem;
 }
+
+li:not(.task-list-item),
+ol {
+  margin-left: 1rem;
+  /* list-style: none; */
+}
+
+li.task-list-item {
+  list-style: none !important;
+}
+
+ol {
+  list-style: number;
+  margin-left: 0rem;
+}
+
+html {
+  /* --pico-primary: red !important; */
+}
