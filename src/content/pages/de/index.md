@@ -1,6 +1,9 @@
 ---
 global.flag: "de"
 ################################################################################
+nav.available: "Einzige verfügbare Übersetzung"
+nav.components: "Komponenten"
+################################################################################
 index.seoTitle: "main"
 index.seoDescription: "Meine Website"
 index.h1: "Willkommen!"

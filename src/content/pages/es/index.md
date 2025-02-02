@@ -1,6 +1,9 @@
 ---
 global.flag: "ar"
 ################################################################################
+nav.available: "Única traducción disponible"
+nav.components: "Componentes"
+################################################################################
 index.seoTitle: "main"
 index.seoDescription: "Mi sitio"
 index.h1: "Bienvenido!"

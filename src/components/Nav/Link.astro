@@ -1,13 +1,15 @@
 ---
 interface Props {
   href: string;
-  text: string;
+  classes?: string;
 }
 
-const { href, text } = Astro.props
+const { href, classes } = Astro.props
 ---
 
-<a href={href} class="tal text-white/80 px-4 py-2 hover:bg-white/15 cursor-pointer">{text}</a>
+<a href={href} class={`tal text-white/80 px-4 py-2 hover:bg-white/15 cursor-pointer ${classes}`}>
+  <slot/>
+</a>
 
 <style>
   .tal {

@@ -4,11 +4,13 @@ import type { CollectionEntry } from "astro:content";
 import Book from "@/components/Book.astro";
 import Home from "@/components/Home.astro"
 import Chart from "@/components/Chart.astro"
-import NavItem from "@/components/NavItem.astro"
+import NavItem from "@/components/Nav/Item.astro"
 import NavLangPicker from "@/components/NavLangPicker.astro"
-import NavItemOption from "@/components/Nav/NavItemOption.astro";
+import NavLink from "@/components/Nav/Link.astro";
 import NavTitle from "./Nav/Title.astro";
 import type { CollectionKey } from "astro:content";
+import type { AstroGlobal } from "astro";
+import getTranslations from "@/utils/getTranslations"
 
 interface Props {
 }
@@ -16,9 +18,9 @@ interface Props {
 const pages = await getCollection("pages");
 const posts = await getCollection("blog");
 
+const [, currentLang, ...slug] = Astro.url.pathname.split("/");
 const langs = [...new Set(pages.map(({ slug }) => slug.split("/")[0]))];
 
-const [, currentLang, ...slug] = Astro.url.pathname.split("/");
 
 function getLanguageFlags(collection: CollectionEntry<"pages">[]) {
   return collection.reduce<Record<string, string>>((flags, { slug, data }) => {
@@ -55,30 +57,55 @@ const isBlog = slug.includes("blog");
 const withBlog = isBlog ? "blog/" : ""
 
 
-const getBlog = async (lang: string) => {
+const getBlog = async (astro: AstroGlobal) => {
+  const [, currentLang, ...slug] = astro.url.pathname.split("/");
   const blog = await getCollection("blog")
-  return blog.filter(post => post.slug.includes(lang)).map(post => ({...post, href: addBlogToSlug(post)}))
+  return blog.filter(post => post.slug.includes(currentLang)).map(post => ({...post, href: addBlogToSlug(post)}))
 }
 
-const blog = await getBlog(currentLang);
+const getCurrentLang = async (astro: AstroGlobal) => {
+  const [, currentLang, ...slug] = astro.url.pathname.split("/");
+  return currentLang
+}
+
+// const getTranslations = async (astro: AstroGlobal) => {
+//   const [, currentLang, ...slug] = astro.url.pathname.split("/");
+//   const pages = await getCollection("pages");
+//   return pages.find(page => page.slug == currentLang)!.data
+// }
+
+const t = await getTranslations(Astro)
+
+const blog = await getBlog(Astro);
 
 function addBlogToSlug(post: CollectionEntry<"blog">): string {
   const [lang] = post.slug.split("/")
   return ["", lang, "blog", post.data.path].join("/")
 }
+
+const availableFlags = langs.filter(lang => {
+      if (lang in translatedSlugs) {
+        if (lang == currentLang) return
+        return lang
+      }
+      else {
+        console.error(`Falta traduccion de *${lang}* en ${thisPostSlug}`)
+        return 
+      }
+    })
 ---
 
 <nav class="fixed flex bottom-0 w-full lg:left-0 lg:flex-col lg:h-screen lg:w-auto lg:border-t-0">
-  <NavItem>
+  <NavItem title="Blog">
     <Book slot="icon"/>
-    <NavTitle title="Blog"/>
-    {blog.map(post => <NavItemOption text={post.data.h1} href={post.href}/>)}
+    <NavTitle title={"Blog"}/>
+    {blog.map(post => <NavLink href={post.href}>{post.data.h1}</NavLink>)}
   </NavItem>
 
-  <NavItem>
+  <NavItem title={t["nav.components"]}>
     <Chart slot="icon"/>
-    <NavTitle title="Components"/>
-    {blog.map(post => <NavItemOption text={post.data.h1} href={post.href}/>)}
+    <NavTitle title={t["nav.components"]}/>
+    {blog.map(post => <NavLink href={post.href}>{post.data.h1}</NavLink>)}
   </NavItem>
 
   <a href={`/${currentLang}/`} title="home" class="hover:bg-white/30 grayscale hover:grayscale-0 transition-all">
@@ -87,26 +114,19 @@ function addBlogToSlug(post: CollectionEntry<"blog">): string {
     </div>
   </a>
 
-  <div class="w-full bg-[#141418] h-auto h-full absolute -z-[1] border-white/40 max-lg:border-t lg:border-r"></div>
-  <div class="w-full bg-[#141418] h-auto h-full  -z-[1] border-white/40 max-lg:border-t lg:border-r"></div>
+  <div class="w-full bg-[#141418] h-full absolute -z-[1] border-white/40 max-lg:border-t lg:border-r"></div>
+  <div class="w-full bg-[#141418] h-full  -z-[1] border-white/40 max-lg:border-t lg:border-r"></div>
 
 
-  <NavItem relative={1} fit={1} row={1} right={1} color={1} py={0}>
+  <NavItem relative fit row right color py={0} title="paises" enabled={availableFlags.length}>
     <NavLangPicker slot="icon"/>
-
-    {langs.map(lang => {
-      if (lang in translatedSlugs) {}
-      else {
-        console.error(`Falta traduccion de *${lang}* en ${thisPostSlug}`)
-        return 
-      }
-      if (lang == currentLang) return
+    {availableFlags.map((lang) => {
       return (
-        <a 
-          class="flex p-4"
+        <NavLink 
+          classes="flex px-4 py-4"
           href={`/${lang}/${withBlog}${isBlog ? translatedSlugs[lang] : slug.join("/")}`}>
           <span class={`fi fi-${flags[lang]} rounded-sm`} style="aspect-ratio: 4/3; width: 2rem;"/>
-        </a>
+        </NavLink>
       )
     })}
   </NavItem>
@@ -115,6 +135,7 @@ function addBlogToSlug(post: CollectionEntry<"blog">): string {
 <script>
   document.addEventListener("mouseup", (event) => {
     const target = event.target as HTMLElement;
+    if (target.tagName == "A" || target.tagName == "SPAN") return
     const t = target.closest("label")?.children[1]
     if (t) {
       let radio = t as HTMLInputElement

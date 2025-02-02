@@ -11,6 +11,8 @@ const blog = defineCollection({
 export const pages = defineCollection({
   schema: z.object({
     "global.flag": z.string(),
+    "nav.available": z.string(),
+    "nav.components": z.string(),
     "index.seoTitle": z.string(),
     "index.seoDescription": z.string(),
     "index.h1": z.string(),

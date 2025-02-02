@@ -1,6 +1,9 @@
 ---
 global.flag: "gb"
 ################################################################################
+nav.available: "Only available translation"
+nav.components: "Components"
+################################################################################
 index.seoTitle: "main"
 index.seoDescription: "My site"
 index.h1: "Welcome!"
