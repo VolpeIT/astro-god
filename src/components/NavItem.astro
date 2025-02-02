@@ -1,0 +1,80 @@
+---
+import type { AstroComponentInstance } from 'astro/runtime/server/index.js'
+
+interface Props {
+  iconElement: AstroComponentInstance;
+  relative: boolean;
+  fit: boolean;
+  row: boolean;
+  right: boolean;
+}
+
+const {iconElement: Icon, relative, fit, row, right} = Astro.props
+---
+
+<label class={`cursor-pointer ${relative ? "relative" : ""}`} style="margin-bottom: 0;">
+  <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30 grayscale hover:grayscale-0 transition-all" title="blog">
+    <Icon/>
+  </div>
+  <input type="checkbox" class="sel hidden"/>
+  <div class={`absolute top-0 flex -z-10 transition-transform bg-[#141418] lg:right-0 ${right && "right-0"} ${fit ? "" : "lg:h-screen"} flex-${row ? "row" : "col"} whitespace-nowrap`}>
+    <slot/>
+  </div>
+</label>
+
+<style>
+  .fi:before {
+    visibility: hidden;
+  }
+
+  div:has(+ *:checked) {
+    filter: grayscale(0);
+  } 
+
+  @media (width < 1024px) {
+    .sel + div {
+      pointer-events: none;
+      transform: translateY(150%);
+    }
+
+    .sel:checked ~ div {
+      pointer-events: inherit;
+      transform: translateY(-100%);
+
+    }
+  }
+
+  @media (width > 1024px) {
+    .sel + div {
+      pointer-events: none;
+      transform: translateX(-100%);
+    }
+
+    .sel:checked + div {
+      pointer-events: inherit;
+      transform: translateX(100%);
+    }
+  }
+
+
+.sel:checked + div a:hover {
+
+  filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
+          drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
+}
+
+
+  .country-selector:hover ~div{
+    transform: translateX(100%);
+  }
+
+  .country-selector ~div:hover{
+    transform: translateX(100%);
+  }
+
+  .country-selector ~div a:hover{
+  filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .3)) 
+          drop-shadow(-1px -1px 0 rgba(255, 255, 255, .3)) drop-shadow(0 0 5px white);
+  }
+
+</style>

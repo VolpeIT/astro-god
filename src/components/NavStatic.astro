@@ -4,6 +4,8 @@ import type { CollectionEntry } from "astro:content";
 import Book from "@/components/Book.astro";
 import Home from "@/components/Home.astro"
 import Chart from "@/components/Chart.astro"
+import NavItem from "@/components/NavItem.astro"
+import NavLangPicker from "@/components/NavLangPicker.astro"
 
 interface Props {
   blog: CollectionEntry<"blog">[]
@@ -60,69 +62,55 @@ function addBlogToSlug(post: CollectionEntry<"blog">): string {
 ---
 
 <nav class="fixed flex bottom-0 w-full border-t lg:left-0 lg:flex-col lg:h-screen lg:w-auto lg:border-r lg:border-t-transparent border-white/50">
+  <NavItem iconElement={Book}>
+    {blog.map(post => {
+      return <a href={`/${addBlogToSlug(post)}`} class="text-white px-4 py-2">{post.data.h1}</a>
+    })}
+  </NavItem>
 
-  <label class="lg:relative cursor-pointer" style="margin-bottom: 0;">
-    <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30" title="blog">
-      <Book/>
-    </div>
-    <input type="checkbox" class="sel hidden"/>
-    <div class="absolute top-0 flex -z-10 transition-transform bg-[#141418] lg:right-0 p-4 lg:h-screen flex-col whitespace-nowrap">
-      {blog.map(post => {
-        return <a href={`/${addBlogToSlug(post)}`} class="text-white">{post.data.h1}</a>
-      })}
-    </div>
-  </label>
+  <NavItem iconElement={Chart}>
+    {blog.map(post => {
+      return <a href={`/${addBlogToSlug(post)}`} class="text-white">{post.data.h1}</a>
+    })}
+  </NavItem>
 
-  <label class=" cursor-pointer" style="margin-bottom: 0;">
-    <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30" title="components">
-      <Chart/>
-    </div>
-    <input type="checkbox" class="sel hidden"/>
-    <div class="absolute top-0 flex -z-10 transition-transform bg-[#141418] lg:right-0 p-4 lg:h-screen flex-col whitespace-nowrap">
-      {blog.map(post => {
-        return <a href={`/${addBlogToSlug(post)}`} class="text-white">{post.data.h1}</a>
-      })}
-    </div>
-  </label>
-
-  <a href={`/${currentLang}/`} title="home" class="hover:bg-white/30">
+  <a href={`/${currentLang}/`} title="home" class="hover:bg-white/30 grayscale hover:grayscale-0 transition-all">
     <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto">
       <Home/>
     </div>
   </a>
 
   <div class="w-full bg-[#141418] h-auto h-full absolute -z-[1]"></div>
+  <div class="w-full bg-[#141418] h-auto h-full  -z-[1]"></div>
 
 
-  <label class="ml-auto lg:mt-auto lg:relative lg:w-full cursor-pointer" style="margin-bottom: 0;">
-    <div class="flex p-4 justify-center items-center mt-0 h-full lg:h-auto hover:bg-white/30">
-      <span class={`fi fi-${flags[currentLang]} rounded-sm`} style="aspect-ratio: 4/3; width: 2rem;"/>
-    </div>
-    <input type="checkbox" class="sel hidden"/>
-    <div class="absolute top-0 flex right-0 -z-10 transition-transform">
-      {langs.map(lang => {
-        if (lang in translatedSlugs) {}
-        else {
-          console.error(`Falta traduccion de *${lang}* en ${thisPostSlug}`)
-          return 
-        }
-        if (lang == currentLang) return
-        return (
-          <a 
-            class="flex p-4"
-            href={`/${lang}/${withBlog}${isBlog ? translatedSlugs[lang] : slug.join("/")}`}>
-            <span class={`fi fi-${flags[lang]} rounded-sm`} style="aspect-ratio: 4/3; width: 2rem;"/>
-          </a>
-        )
-      })}
-    </div>
-  </label>
+  <NavItem iconElement={NavLangPicker} relative={1} fit={1} row={1} right={1}>
+    {langs.map(lang => {
+      if (lang in translatedSlugs) {}
+      else {
+        console.error(`Falta traduccion de *${lang}* en ${thisPostSlug}`)
+        return 
+      }
+      if (lang == currentLang) return
+      return (
+        <a 
+          class="flex p-4"
+          href={`/${lang}/${withBlog}${isBlog ? translatedSlugs[lang] : slug.join("/")}`}>
+          <span class={`fi fi-${flags[lang]} rounded-sm`} style="aspect-ratio: 4/3; width: 2rem;"/>
+        </a>
+      )
+    })}
+  </NavItem>
 </nav>
 
 <style>
   .fi:before {
     visibility: hidden;
   }
+
+  div:has(+ *:checked) {
+    filter: grayscale(0);
+  } 
 
   @media (width < 1024px) {
     .sel + div {
