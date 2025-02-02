@@ -50,14 +50,15 @@ code {
   position: relative;
 }
 
-code>span {}
+code > span {
+}
 
-code>span::before {
+code > span::before {
   counter-increment: code;
   content: counter(code) " ";
   color: rgba(255, 255, 255, 0.3);
   text-align: right;
   position: absolute;
   display: flex;
-  right: 96%;
+  right: calc(100% - 1.5rem);
 }
