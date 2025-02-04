@@ -50,7 +50,7 @@ const headersNice = extractRawHeaders(body ?? "")
     <aside class="h-full sticky top-14 w-50 max-lg:hidden pico">
       <ul>
         {headerHrefs.map((header, i) => {
-          return <li><a href={`#${header}`} class="-z-10 tal block text-sm text-white/70 hover:text-white">{headersNice[i]}</a></li>
+          return <li><a href={`#${header}`} class="-z-10 tal block text-xs text-white/70 hover:text-white">{headersNice[i]}</a></li>
         })}
       </ul>
     </aside>

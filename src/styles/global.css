@@ -19,7 +19,7 @@ pre {
 
 code:has(> span) {
   padding: 0 !important;
-  padding-left: 2.5rem !important;
+  padding-left: 2rem !important;
 }
 
 li:not(.task-list-item),

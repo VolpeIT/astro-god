@@ -49,7 +49,6 @@ x<sup>2</sup>
 #include <raylib.h>
 #include <flecs.h>
 
-
 typedef struct {
     int x,y;
 } Position;
