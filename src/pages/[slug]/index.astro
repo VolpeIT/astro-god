@@ -30,6 +30,8 @@ function addBlogToSlug(post: CollectionEntry<"blog">): string {
   const [lang] = post.slug.split("/")
   return [lang, "blog", post.data.path].join("/")
 }
+
+const {Content} = await Astro.props.render()
 ---
 
 <Layout seoTitle={t["index.seoTitle"]}>
@@ -39,5 +41,6 @@ function addBlogToSlug(post: CollectionEntry<"blog">): string {
     <p>{t["index.p1"]}</p>
     <p>{t["index.p2"]}</p>
     <p>{t["index.p3"]}</p>
+    <Content/>
   </section>
 </Layout>

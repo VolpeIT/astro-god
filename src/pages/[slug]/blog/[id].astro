@@ -23,7 +23,7 @@ const { Content } = await Astro.props.render()
 function extractHeaders(markdown: string): string[] {
   return markdown
     .split("\n")
-    .filter((line: string) => /^#{1,6} /.test(line)) // Filtra solo los encabezados
+    .filter((line: string) => /^#{2,6} /.test(line)) // Filtra solo los encabezados
     .map((line: string) =>
       line
         .replace(/^#+ /, "") // Elimina los `#` y el espacio
@@ -37,7 +37,7 @@ function extractHeaders(markdown: string): string[] {
 function extractRawHeaders(markdown: string): string[] {
   return markdown
     .split("\n")
-    .filter((line: string) => /^#{1,6} /.test(line)) // Filtra solo los encabezados
+    .filter((line: string) => /^#{2,6} /.test(line)) // Filtra solo los encabezados
     .map((line: string) => line.replace(/^#+ /, "").trim()); // Elimina los `#` iniciales y espacios extra
 }
 

@@ -4,20 +4,20 @@ h1: "Conceptos de ciencia de computadoras"
 h2: "a"
 ---
 
-# Conceptos iniciales
+# Ciencia de computadoras REAL
 
-## Prologo
+## Prólogo
 
-A lo largo de este ensayo vamos a usar de ejemplo a C y en algunos casos a Rust.
+A lo largo de este ensayo vamos a usar de ejemplo a C y, en algunos casos, a Rust.
+<br>
+La idea es ver todo aplicado a código real y no con números en el aire como se hace en las instituciones convencionales.<br>
 
-La idea es ver todo aplicado a codigo real, y no con numeros en el aire como se hace en las instituciones convensionales.<br>
-
-Voy a intentar ser lo mas conciso y preciso. No es un blog que apunte a gente que no haya tenido previamente ningun acercamiento al mundo IT por lo que aconsejo discrecion.
+Voy a intentar ser lo más conciso y preciso posible. No es un blog dirigido a personas que no hayan tenido previamente ningún acercamiento al mundo IT, por lo que aconsejo discreción.
 
 ## Bytes
 
 1 byte son 8 bits.<br>
-Las siguientes son las medidas que mas vamos a utilizar:
+Las siguientes son las medidas que más vamos a utilizar:
 
 <table border="1" style="max-width: 50%;">
   <thead>
@@ -36,7 +36,7 @@ Las siguientes son las medidas que mas vamos a utilizar:
 
 ## Tipos
 
-Para poder usar estos bytes, los distintos lenguajes de programacion nos proveen con **tipos** que, si bien pueden variar de nombre, la idea detras es la misma.
+Para poder usar estos bytes, los distintos lenguajes de programación nos proveen con tipos que, si bien pueden variar de nombre, la idea detrás es la misma.
 
 `signed / i = con signo (positivos y negativos)`<br>
 `unsigned / u = sin signo (solo positivos)`
@@ -83,11 +83,10 @@ Para poder usar estos bytes, los distintos lenguajes de programacion nos proveen
   </tbody>
 </table>
 
-## Representacion
+## Representación
 
-Para indicarle al lenguaje que estamos representando un binario, lo indicamos con un `0b` delante.
-<br>
-B significa binario.
+Para indicarle al lenguaje que estamos representando un binario, lo indicamos con un 0b delante.<br>
+"B" significa binario.
 
 Por ejemplo:
 
@@ -101,13 +100,11 @@ char ocho_bits = 0b00000000;   // 0
 i8 ocho_bits = 0b0000_0000; // algunos lenguajes permiten el uso de "_" para mejor legibilidad
 ```
 
-El primer bit en los numeros con signo indica que el valor sera positivo (0) o negativo (1).
+El primer bit en los números con signo indica que el valor será positivo (0) o negativo (1).
 <br>
-
-Notese que con la misma logica que los numeros positivos empiezan en 0 y el 1 indica los valores que se "cuentan", en los negativos funciona de la manera opuesta.
+Nótese que, con la misma lógica en la que los números positivos empiezan en 0 y el 1 indica los valores que se "cuentan", en los negativos funciona de la manera opuesta.
 <br>
-
-Notese tambien que como el -0 no existe (comunmente), el limite positivo (numero maximo) sera siempre 1 menos que el limite negativo (numero minimo)
+También se debe considerar que, como el -0 no existe (comúnmente), el límite positivo (número máximo) será siempre 1 menos que el límite negativo (número mínimo).
 
 ```rs
 // Rust
@@ -123,10 +120,10 @@ u8 max_u8 = 0b1111_1111; // 255
 u8 min_u8 = 0b0000_0000; // 0
 ```
 
-La cantidad de numeros posibles a representar es 2<sup>n</sup> siendo n la cantidad de bits.
+La cantidad de números posibles a representar es 2n, siendo "n" la cantidad de bits.
 <br>
-Como son 8 bits seria: 2<sup>8</sup> -> 256
+Como son 8 bits, sería: 28 -> 256.
 <br>
-En el caso de los unsigned son 255 + el cero.
+En el caso de los unsigned, es 255 + el cero.
 <br>
-En el caso de los signed son 128 + 127 + el cero
+En el caso de los signed, es 128 + 127 + el cero.
